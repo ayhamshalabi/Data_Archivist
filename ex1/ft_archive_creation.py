@@ -27,6 +27,7 @@ def read_file(file_name: str) -> str | None:
 
 
 def transform_data(contant: str) -> None:
+    print("Transform data:")
     new_contant: list[str] = [line + "#\n" for line in contant.splitlines()]
 
     print("---")
@@ -49,8 +50,9 @@ def transform_data(contant: str) -> None:
 
         print(f"Data saved in file {new_file_name}.")
 
-    except IOError:
-        print(f"Error opening file '{new_file_name}'")
+    except IOError as err:
+        print(f"Error opening file '{new_file_name} ': {err}")
+        print("Data not saved.")
 
     finally:
         if new_file is not None:
@@ -63,8 +65,8 @@ def ft_archive_creation() -> None:
         return
 
     print("=== Cyber Archives Recovery & Preservation ===")
-    print(f"Accessing file '{sys.argv[1]}'")
 
+    print(f"Accessing file '{sys.argv[1]}'")
     contant: str | None = read_file(sys.argv[1])
 
     if contant is not None:
