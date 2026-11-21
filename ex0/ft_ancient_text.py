@@ -13,10 +13,10 @@ def ft_ancient_text() -> None:
     file: IO[str] | None = None
     try:
         file = open(sys.argv[1])
-        contant: str = file.read()
+        content: str = file.read()
 
         print("---")
-        print(contant, end="")
+        print(content, end="")
         print("---")
 
     except OSError as err:
