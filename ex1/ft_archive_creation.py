@@ -1,64 +1,75 @@
-import typing
 import sys
+from typing import IO
 
 
-def transform_data(content: str) -> str:
-    lines: list[str] = content.splitlines()
-    transformed_lines: list[str] = [line + "#" for line in lines]
-    if transformed_lines:
-        return "\n".join(transformed_lines) + "\n"
-    return ""
-
-
-def recover_ancient_text(filename: str) -> None:
-    print("=== Cyber Archives Recovery & Preservation ===")
-    print(f"Accessing file '{filename}'")
-
-    file: typing.IO[str] | None = None
-    content: str = ""
-
+def read_file(file_name: str) -> str | None:
+    file: IO[str] | None = None
+    contant: str | None = None
     try:
-        file = open(filename, "r")
-        content = file.read()
-    except OSError as err:
-        print(f"Error opening file '{filename}': {err}")
-        return
+        file = open(file_name)
+        contant = file.read()
+
+        print("---")
+        print(contant, end="")
+        print("---")
+
+    except IOError as err:
+        print(f"Error opening file '{sys.argv[1]}': {err}")
+
     finally:
         if file is not None:
             file.close()
-            print(f"File '{filename}' closed.")
+            print(f"File '{file_name}' closed.")
 
-    print(content, end="" if content.endswith("\n") else "\n")
+    if contant is not None:
+        return contant
+    return None
 
-    transformed: str = transform_data(content)
-    print("Transform data:")
-    print(transformed, end="" if transformed.endswith("\n") else "\n")
 
-    new_filename: str = input("Enter new file name (or empty): ").strip()
-    if not new_filename:
+def transform_data(contant: str) -> None:
+    new_contant: list[str] = [line + "#\n" for line in contant.splitlines()]
+
+    print("---")
+    for line in new_contant:
+        print(line, end="")
+    print("---")
+
+    new_file_name: str = input("Enter new file name (or empty): ")
+    if new_file_name == "":
         print("Not saving data.")
         return
+    else:
+        print(f"Saving data to '{new_file_name}'")
 
-    print(f"Saving data to '{new_filename}'")
-    out_file: typing.IO[str] | None = None
+    new_file: IO[str] | None = None
     try:
-        out_file = open(new_filename, "w")
-        out_file.write(transformed)
-        print(f"Data saved in file '{new_filename}'.")
-    except OSError as err:
-        print(f"Error saving file '{new_filename}': {err}")
+        new_file = open(new_file_name, "w")
+        for line in new_contant:
+            new_file.write(line)
+
+        print(f"Data saved in file {new_file_name}.")
+
+    except IOError:
+        print(f"Error opening file '{new_file_name}'")
+
     finally:
-        if out_file is not None:
-            out_file.close()
+        if new_file is not None:
+            new_file.close()
 
 
-def main() -> None:
-    if len(sys.argv) != 2:
+def ft_archive_creation() -> None:
+    if len(sys.argv) < 2:
         print("Usage: ft_archive_creation.py <file>")
         return
 
-    recover_ancient_text(sys.argv[1])
+    print("=== Cyber Archives Recovery & Preservation ===")
+    print(f"Accessing file '{sys.argv[1]}'")
+
+    contant: str | None = read_file(sys.argv[1])
+
+    if contant is not None:
+        transform_data(contant)
 
 
 if __name__ == "__main__":
-    main()
+    ft_archive_creation()
