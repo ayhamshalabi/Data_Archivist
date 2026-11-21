@@ -10,7 +10,7 @@ def ft_ancient_text() -> None:
     print("=== Cyber Archives Recovery ===")
 
     filename: str = sys.argv[1]
-    print(f"Accessing file {filename}")
+    print(f"Accessing file '{filename}'")
 
     file: IO[str] | None = None
     try:
@@ -32,5 +32,3 @@ def ft_ancient_text() -> None:
 
 if __name__ == "__main__":
     ft_ancient_text()
-
-# except (OSError, UnicodeDecodeError) as err:
