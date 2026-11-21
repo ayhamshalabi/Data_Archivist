@@ -67,7 +67,7 @@ def transform_data(content: str) -> None:
             new_file.close()
 
 
-def ft_archive_creation() -> None:
+def ft_stream_management() -> None:
     if len(sys.argv) != 2:
         print("Usage: ft_stream_management.py <file>")
         return
@@ -83,4 +83,4 @@ def ft_archive_creation() -> None:
 
 
 if __name__ == "__main__":
-    ft_archive_creation()
+    ft_stream_management()
