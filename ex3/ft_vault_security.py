@@ -1,42 +1,47 @@
-def ft_vault_security(
+def secure_archive(
     file_name: str,
     action: str = "read",
     new_content: str = "",
 ) -> tuple[bool, str]:
+    res: tuple[bool, str] = (False, f"Invalid action: '{action}'")
     try:
-        with open(file_name, "r+") as file:
-            contant: str = file.read()
-            if action == "write":
+        if action == "read":
+            with open(file_name, "r") as file:
+                contant: str = file.read()
+                res = (True, contant)
+        elif action == "write":
+            with open(file_name, "w") as file:
                 file.write(new_content)
-                return (True, "Content successfully written to file")
+                res = (True, "Content successfully written to file")
 
-    except IOError as err:
+    except OSError as err:
         return (False, f"{err}")
 
-    return (True, contant)
+    return res
 
 
 def main() -> None:
     print("=== Cyber Archives Security ===")
 
     print("Using 'secure_archive' to read from a nonexistent file:")
-    print(ft_vault_security("/not/existing/file"))
+    print(secure_archive("/not/existing/file"))
 
     print("")
 
     print("Using 'secure_archive' to read from an inaccessible file:")
-    print(ft_vault_security("inaccessible"))
+    print(secure_archive("inaccessible"))
 
     print("")
 
-    print("Using 'secure_archive' to read from an regular file:")
-    res = ft_vault_security("regular.txt")
+    print("Using 'secure_archive' to read from a regular file:")
+    res: tuple[bool, str] = secure_archive("regular.txt")
     print(res)
 
     print("")
 
-    print("Using 'secure_archive' to write previous content to a new file:")
-    print(ft_vault_security("new_file.txt", "write", res[1]))
+    if res[0]:
+        print("Using 'secure_archive' to write previous content to a new file:")
+        print(secure_archive("new_file.txt", "write", res[1]))
 
 
 if __name__ == "__main__":

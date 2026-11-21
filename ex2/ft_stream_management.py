@@ -10,12 +10,12 @@ def read_file(file_name: str) -> str | None:
         content = file.read()
 
         print("---")
-        print(content, end="")
+        print(content, end="" if content.endswith("\n") else "\n")
         print("---")
 
-    except IOError as err:
+    except OSError as err:
         print(
-            f"[STDERR] Error opening file '{sys.argv[1]}': "
+            f"[STDERR] Error opening file '{file_name}': "
             f"{err}",
             file=sys.stderr
         )
@@ -25,9 +25,7 @@ def read_file(file_name: str) -> str | None:
             file.close()
             print(f"File '{file_name}' closed.")
 
-    if content is not None:
-        return content
-    return None
+    return content
 
 
 def transform_data(content: str) -> None:
@@ -39,12 +37,14 @@ def transform_data(content: str) -> None:
         print(line, end="")
     print("---")
 
-    new_file_name: str = input("Enter new file name (or empty): ")
+    print("Enter new file name (or empty): ", file=sys.stdout, end="")
+    sys.stdout.flush()
+    new_file_name: str = sys.stdin.readline().strip("\n")
+
     if new_file_name == "":
         print("Not saving data.")
         return
-    else:
-        print(f"Saving data to '{new_file_name}'")
+    print(f"Saving data to '{new_file_name}'")
 
     new_file: IO[str] | None = None
     try:
@@ -52,11 +52,11 @@ def transform_data(content: str) -> None:
         for line in new_content:
             new_file.write(line)
 
-        print(f"Data saved in file {new_file_name}.")
+        print(f"Data saved in file '{new_file_name}'.")
 
-    except IOError as err:
+    except OSError as err:
         print(
-            f"[STDERR] Error opening file '{sys.argv[1]}': "
+            f"[STDERR] Error opening file '{new_file_name}': "
             f"{err}",
             file=sys.stderr
         )
@@ -68,14 +68,15 @@ def transform_data(content: str) -> None:
 
 
 def ft_archive_creation() -> None:
-    if len(sys.argv) < 2:
-        print("Usage: ft_archive_creation.py <file>")
+    if len(sys.argv) != 2:
+        print("Usage: ft_stream_management.py <file>")
         return
 
     print("=== Cyber Archives Recovery & Preservation ===")
 
-    print(f"Accessing file '{sys.argv[1]}'")
-    content: str | None = read_file(sys.argv[1])
+    filename: str = sys.argv[1]
+    print(f"Accessing file '{filename}'")
+    content: str | None = read_file(filename)
 
     if content is not None:
         transform_data(content)

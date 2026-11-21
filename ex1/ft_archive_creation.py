@@ -6,24 +6,22 @@ def read_file(file_name: str) -> str | None:
     file: IO[str] | None = None
     content: str | None = None
     try:
-        file = open(file_name)
+        file = open(file_name, "r")
         content = file.read()
 
         print("---")
-        print(content, end="")
+        print(content, end="" if content.endswith("\n") else "\n")
         print("---")
 
-    except IOError as err:
-        print(f"Error opening file '{sys.argv[1]}': {err}")
+    except OSError as err:
+        print(f"Error opening file '{file_name}': {err}")
 
     finally:
         if file is not None:
             file.close()
             print(f"File '{file_name}' closed.")
 
-    if content is not None:
-        return content
-    return None
+    return content
 
 
 def transform_data(content: str) -> None:
@@ -39,8 +37,7 @@ def transform_data(content: str) -> None:
     if new_file_name == "":
         print("Not saving data.")
         return
-    else:
-        print(f"Saving data to '{new_file_name}'")
+    print(f"Saving data to '{new_file_name}'")
 
     new_file: IO[str] | None = None
     try:
@@ -48,10 +45,10 @@ def transform_data(content: str) -> None:
         for line in new_content:
             new_file.write(line)
 
-        print(f"Data saved in file {new_file_name}.")
+        print(f"Data saved in file '{new_file_name}'.")
 
-    except IOError as err:
-        print(f"Error opening file '{new_file_name} ': {err}")
+    except OSError as err:
+        print(f"Error opening file '{new_file_name}': {err}")
         print("Data not saved.")
 
     finally:
@@ -60,14 +57,15 @@ def transform_data(content: str) -> None:
 
 
 def ft_archive_creation() -> None:
-    if len(sys.argv) < 2:
+    if len(sys.argv) != 2:
         print("Usage: ft_archive_creation.py <file>")
         return
 
     print("=== Cyber Archives Recovery & Preservation ===")
 
-    print(f"Accessing file '{sys.argv[1]}'")
-    content: str | None = read_file(sys.argv[1])
+    filename: str = sys.argv[1]
+    print(f"Accessing file '{filename}'")
+    content: str | None = read_file(filename)
 
     if content is not None:
         transform_data(content)
