@@ -40,7 +40,9 @@ def main() -> None:
     print("")
 
     if res[0]:
-        print("Using 'secure_archive' to write previous content to a new file:")
+        print(
+            "Using 'secure_archive' to write previous content to a new file:"
+        )
         print(secure_archive("new_file.txt", "write", res[1]))
 
 
